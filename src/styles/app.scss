@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;  
+    font-size: 16px;
+    color: #333;
+}
+
+$white: white;
+$grey: #f1f1f1;
+$crimson: crimson;
+
+.day {
+    padding: 2.5px;
+    background-color: $white;
+    transition: background-color 0.3s ease-in;
+    &:hover {
+        background-color: $crimson;
+        color: $white;
+    }
+}
+
+.day--fold {
+    color: $grey;
+    &:hover {
+        background-color: $grey;
+        color:darken($grey, 15%);
+    }
+    
+}
+
+.month {
+    display: grid;
+    grid-template-columns: repeat(7, 14.286%);
+    grid-template-columns: repeat(6, 16.666%);
+}

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 const Container = styled.button`
     text-align: center;
-    font-size: 1.5em
-    &:hover {
-        background-color: #f1f1f1;
-    }
+    font-size: 1.5em;
+    background-color: transparent;
+    padding: 0px 10px;
+    border: none;
 `
 
 const Arrow = ({ type, onClick}) => (

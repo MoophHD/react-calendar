@@ -1,13 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 
-const week = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-
-const NamedWeek = () => (
+const NamedWeek = ({weekFormat}) => (
     <div className="week">
-        {week.map((day) => {
-            return(<div className="day day--named">{day}</div>)
+        {weekFormat.map((num) => {
+            return(<div 
+                    key={`_namedWeekDayN${num}`}
+                    className="day day--named">{moment().weekday(num).format('dd')}</div>)
         })}
     </div>
 )
+
+NamedWeek.PropTypes = {
+    weekFormat: PropTypes.array
+}
 
 export default NamedWeek;

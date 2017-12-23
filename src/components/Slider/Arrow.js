@@ -11,7 +11,8 @@ const Container = styled.button`
 `
 
 const Arrow = ({ type, onClick}) => (
-    <Container onClick={onClick}>
+    <Container 
+        onClick={onClick}>
         <i className={`fa fa-angle-${type}`}></i>
     </Container>
 )

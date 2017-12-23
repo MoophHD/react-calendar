@@ -15,17 +15,21 @@ class Slider extends Component {
         month = moment(month, 'MM').format('MMMM'); 
 
         return(
-            <div>
-                <Arrow type="left" onClick={switchMonthPrevious}/>
-                <span>{month}</span> <span>{year}</span>
-                <Arrow type="right" onClick={switchMonthNext}/>
+            <div style={{textAlign: 'center'}}>
+                <span>
+                    <Arrow type="left" onClick={switchMonthPrevious}/>
+                    <div  style={{display:'inline-block'}}>
+                        <span>{month}</span> <span>{year}</span>
+                    </div>
+                    <Arrow type="right" onClick={switchMonthNext}/>
+                </span>
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const current = state.current;
+    const current = state.page.current;
     return {
         month: current.month,
         year: current.year

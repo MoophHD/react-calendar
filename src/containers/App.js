@@ -16,11 +16,11 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    score: state.score
-  }
-}
+// function mapStateToProps(state) {
+//   return {
+//     score: state.score
+//   }
+// }
 
 // function mapDispatchToProps(dispatch) {
 //   return {
@@ -30,5 +30,5 @@ function mapStateToProps(state) {
 // }
 
 
-export default connect(mapStateToProps, null)(App);
+export default connect(null, null)(App);
 

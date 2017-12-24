@@ -3,14 +3,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Calendar from './Calendar'
+import Appointment from './Appointment'
 
 class App extends Component {
   render() {
     return (
-      <div 
+      <div
         className="app">
         <h1>React Calendar</h1>
         <Calendar />
+        <Appointment />
       </div>
     );
   }

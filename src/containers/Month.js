@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import * as actions from '../actions/page'
 
 import Day from '../components/Day'
 
 const cells = 7 * 6; // 7 days per each of 6 rows 
+
+function shift(target) { // 0..30  >> 1..31
+    target.shift();
+    target.push(target[target.length-1] + 1);
+    return target;
+}
 
 class Month extends Component {
     constructor(props) {
@@ -19,47 +27,34 @@ class Month extends Component {
     }
 
     setDays(dt, weekFormat) {
-        function shift(target) { // 0..30  >> 1..31
-            target.pop();
-            target.push(target[target.length-1] + 1);
-        }
-        
+ 
         dt = moment(dt);
         let mid = Array.from(Array(dt.daysInMonth()).keys());
+        shift(mid);
+        let fstDayNum = parseInt(moment(dt.format()).startOf('month').format('d')) + 1; // 0..6 >> 1..7
+        let fstDayOrder = weekFormat.indexOf(fstDayNum);
 
-        let fstDayNum = parseInt(dt.startOf('month').format('d')) + 1; // 0..6 >> 1..7
-        let fstDayOrder = weekFormat.indexOf(fstDayNum) + 1;
-        console.log(fstDayNum)
-        console.log(fstDayOrder);
 
-        let lstDayNum = parseInt(dt.endOf('month').format('d')) + 1;
-        let lstDayOrder = weekFormat.indexOf(lstDayNum) + 1;
-        // console.log(lstDayNum)
-        // console.log(lstDayOrder)
+        let lstDayNum = parseInt(moment(dt.format()).endOf('month').format('d')) + 1;
+        let lstDayOrder = weekFormat.indexOf(lstDayNum);
 
-        // |                                          |  
-        let fTopInit = Array.from(Array(dt.clone().subtract(1, 'M').daysInMonth()).keys());
-        shift(fTopInit);
-        let fTop = fTopInit.slice(fTopInit.length - lstDayOrder);
+        // creates an array of numbers, shifts it (0..30 >> 1..31)
+        let fTopInit = shift(Array.from(Array(moment(dt.format()).subtract(1, 'M').daysInMonth()).keys()));
 
-                                    // |                                     |  
-        let fBotInit = Array.from(Array(dt.clone().add(1, 'M').daysInMonth()).keys());
-        shift(fBotInit);
-        let fBot = fBotInit.slice(lstDayOrder, 7);
-        
+        let fTop = fTopInit.slice(fTopInit.length - fstDayOrder + 1);
+
+        let fBotInit = shift(Array.from(Array(dt.clone().add(1, 'M').daysInMonth()).keys()));
+
+        let fBot = fBotInit.slice(0, 7 - lstDayOrder);
+
         if ((mid.length + fTop.length + fBot.length) < cells ) {
-            if (fTop.length > fBot.length) { //then add a week to bottom
-                fBot = [fBotInit.slice(8, 14), ...fBot];
+            //fBot always gets a free row if needed
+            if (fBot.length > fTop.length) {
+                fTop = fTopInit.slice(fTopInit.length - fTop.length - 7);
             } else {
-                fTop = [...fTop, fTopInit.slice(-fTop.length, -fTop.length-7)];
+                fBot = fBotInit.slice(0, fBot.length + 7);
             }
         }
-
-        shift(mid);
-
-        fTop.sort((a, b) => a - b);
-        mid.sort((a, b) => a - b);
-        fBot.sort((a, b) => b - a);
 
         this.setState(() => {return{
             foldTop: fTop,
@@ -78,6 +73,7 @@ class Month extends Component {
 
     render() {
         const { foldTop, middle, foldBottom } = this.state;
+        const { showAppointment, switchMonthNext, switchMonthPrevious } = this.props.actions;
         let { dt } = this.props;
 
         dt = moment(dt);
@@ -86,6 +82,7 @@ class Month extends Component {
 
         let fTop = foldTop.map( day => {
             return (<Day 
+                        onClick={switchMonthPrevious}
                         key={`_fTop${day}`}
                         date={moment(loopDt).date(day).format()}
                         fold={true}/>)
@@ -94,6 +91,7 @@ class Month extends Component {
         loopDt = dt.clone();
         let mid = middle.map( day => {
             return (<Day 
+                        onClick={showAppointment}
                         key={`_middle${day}`}
                         date={loopDt.date(day).format()}
                         fold={false}/>)
@@ -103,6 +101,7 @@ class Month extends Component {
         
         let fBot = foldBottom.map( day => {
             return (<Day 
+                        onClick={switchMonthNext}
                         key={`_fBot${day}`}
                         date={moment(loopDt).date(day).format()}
                         fold={true}/>)
@@ -122,11 +121,17 @@ function mapStateToProps(state) {
     return {
       dt: current.dt
     }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
   }
+}
 
 Month.PropTypes = {
     weekFormat: PropTypes.array,
     dt: PropTypes.dt
 }
 
-export default connect(mapStateToProps, null)(Month);
+export default connect(mapStateToProps, mapDispatchToProps)(Month);

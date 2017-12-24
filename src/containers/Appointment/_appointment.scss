@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+
+.appointment {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.appointment--input {
+    background-color: $white;
+    background-color: $grey;
+    width: 85%;
+    display: inline-block;
+    height: 250px;
+    border: none;
+    outline-color: $crimson;
+    resize: none;
+    padding: 5px;
+    
+}
+
+.appointment--btnContainer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.appointment--button {
+    background-color: $black;
+    width: 150px;
+    line-height: 50px;
+    font-size: 1.25em;
+    color: $white;
+    border: none;
+    display: inline-block;
+
+    &:not(:last-child) {
+        margin-right: 50px;
+    }
+}

@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 import moment from 'moment';
 
-const Day = ({ date, appointment, fold }) => (
-    <div className={`day ${fold ? 'day--fold' : ''} ${appointment ? 'day--appointment' : ''}`}>
+const Day = ({ date, appointment, fold, onClick }) => (
+    <div 
+        onClick={() => onClick(date)}
+        className={`day ${fold ? 'day--fold' : ''} 
+        ${appointment ? 'day--appointment' : ''}`}>
         <span>
             {moment(date).date()}
         </span>
@@ -12,7 +15,9 @@ const Day = ({ date, appointment, fold }) => (
 )
 
 Day.PropTypes = {
-    date: PropTypes.string
+    date: PropTypes.string.isRequired,
+    fold: PropTypes.bool,
+    onClick: PropTypes.func
 }
 
 export default Day;

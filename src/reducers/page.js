@@ -2,17 +2,20 @@ import moment from 'moment';
 
 import { 
     SWITCH_MONTH_NEXT,
-    SWITCH_MONTH_PREVIOUS
-} from '../constants/calendar'
+    SWITCH_MONTH_PREVIOUS,
+    SHOW_APPOINTMENT,
+    SUBMIT_APPOINTMENT,
+    CLEAR_APPOINTMENT
+} from '../constants/page'
 
 let now = moment();
 
 let initialState = {
-    dayIds: {},
-    dayById: {},
+    dayByDt: {},
+    activeDay: '', // dt: ..., content: ...
     current: {
         day: now.day(),
-        month: now.month(),
+        month: now.month() + 1, //0..11 > 1..12s
         year: now.year(),
         dt: now.format()
     }
@@ -22,17 +25,35 @@ let month, year, dt;
 
 export default function page(state=initialState, action) {
     switch (action.type) {
+        case (CLEAR_APPOINTMENT): {
+            return {...state, dayByDt: {
+                    ...state.dayByDt,
+                        [state.activeDay]: ''
+                        }}
+        }
+        case (SUBMIT_APPOINTMENT): {
+            if (!action.value) return state;
+            return {...state, dayByDt: {
+                ...state.dayByDt,
+                [state.activeDay]: action.value
+            }}
+        }
+        case (SHOW_APPOINTMENT): {
+            return {...state, activeDay: action.dt}
+        }
         case (SWITCH_MONTH_NEXT): {
             month = state.current.month;
             year = state.current.year;
             dt = state.current.dt;
 
             month++;
-            month = month > 12 ? 1 : month;
 
             year = month > 12 ? year + 1 : year;
 
-            dt = moment(dt).month(month).year(year).format();
+            month = month > 12 ? 1 : month;
+            
+
+            dt = moment(dt).month(month - 1).year(year).format();
 
             return {...state, 
                     current: {
@@ -49,11 +70,13 @@ export default function page(state=initialState, action) {
             dt = state.current.dt
 
             month--;
-            month = month < 1 ? 12 : month;
 
             year = month < 1 ? year - 1 : year;
+            
+            month = month < 1 ? 12 : month;
 
-            dt = moment(dt).month(month).year(year).format();
+
+            dt = moment(dt).month(month - 1).year(year).format();
 
             return {...state, 
                     current: {

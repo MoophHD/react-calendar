@@ -1,12 +1,8 @@
+@import 'variables';
+
 * {
     box-sizing: border-box;
 }
-
-
-$black: #333;
-$white: white;
-$grey: #f1f1f1;
-$crimson: crimson;
 
 body {
     padding: 0;
@@ -16,7 +12,8 @@ body {
     color: $black;
 }
 
-.calendar {
+.app {
+    text-align: center;
     width: 400px;
 }
 

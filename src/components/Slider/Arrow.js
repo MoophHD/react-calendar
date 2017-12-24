@@ -8,10 +8,14 @@ const Container = styled.button`
     background-color: transparent;
     padding: 0px 10px;
     border: none;
+    margin-${props => props.type}: 50px;
+    
+    
 `
 
 const Arrow = ({ type, onClick}) => (
     <Container 
+        type={type}
         onClick={onClick}>
         <i className={`fa fa-angle-${type}`}></i>
     </Container>

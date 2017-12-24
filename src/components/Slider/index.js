@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import moment from 'moment'
+import moment from 'moment';
 
-import Arrow from './Arrow'
-
-import * as actions from '../../actions/calendar'
+import Arrow from './Arrow';
+import * as actions from '../../actions/page';
+import './_slider.scss';
 
 class Slider extends Component {
     render() {
@@ -15,14 +15,12 @@ class Slider extends Component {
         month = moment(month, 'MM').format('MMMM'); 
 
         return(
-            <div style={{textAlign: 'center'}}>
-                <span>
-                    <Arrow type="left" onClick={switchMonthPrevious}/>
-                    <div  style={{display:'inline-block'}}>
-                        <span>{month}</span> <span>{year}</span>
-                    </div>
-                    <Arrow type="right" onClick={switchMonthNext}/>
-                </span>
+            <div className="slider">
+                <Arrow type="left" onClick={switchMonthPrevious}/>
+                <div  style={{display:'inline-block'}}>
+                    <span>{month}</span> <span>{year}</span>
+                </div>
+                <Arrow type="right" onClick={switchMonthNext}/>
             </div>
         )
     }

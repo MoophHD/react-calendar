@@ -64,7 +64,7 @@ class Month extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setDays(nextProps.dt, nextProps.weekFormat);
+        if (nextProps.dt != this.props.dt) this.setDays(nextProps.dt, nextProps.weekFormat);
     }
 
     componentDidMount() {
@@ -73,37 +73,49 @@ class Month extends Component {
 
     render() {
         const { foldTop, middle, foldBottom } = this.state;
-        const { showAppointment, switchMonthNext, switchMonthPrevious } = this.props.actions;
-        let { dt } = this.props;
-
+        const { selectDay, switchMonthNext, switchMonthPrevious } = this.props.actions;
+        let { dt, dayByDt } = this.props;
         dt = moment(dt);
+
+        let iterDt;
 
         let loopDt = dt.clone().subtract(1, 'M').format();
 
         let fTop = foldTop.map( day => {
+            iterDt = moment(loopDt).date(day).format();
             return (<Day 
+                        appointment={dayByDt.hasOwnProperty(iterDt) && dayByDt[iterDt] !== ''}
                         onClick={switchMonthPrevious}
                         key={`_fTop${day}`}
-                        date={moment(loopDt).date(day).format()}
+                        date={iterDt}
                         fold={true}/>)
         })
 
         loopDt = dt.clone();
+
         let mid = middle.map( day => {
-            return (<Day 
-                        onClick={showAppointment}
+            iterDt = loopDt.date(day).format();
+            console.log(dt);
+            console.log(iterDt);
+            console.log('//');
+            return (<Day   
+                        active={iterDt == dt.format()}
+                        appointment={dayByDt.hasOwnProperty(iterDt) && dayByDt[iterDt] !== ''}
+                        onClick={selectDay}
                         key={`_middle${day}`}
-                        date={loopDt.date(day).format()}
+                        date={iterDt}
                         fold={false}/>)
         })
 
-        loopDt = dt.clone().add(1, 'M').format();
+        loopDt = dt.clone().add(1, 'M').format()
         
         let fBot = foldBottom.map( day => {
+            iterDt = moment(loopDt).date(day).format();
             return (<Day 
+                        appointment={dayByDt.hasOwnProperty(iterDt) && dayByDt[iterDt] !== ''}
                         onClick={switchMonthNext}
                         key={`_fBot${day}`}
-                        date={moment(loopDt).date(day).format()}
+                        date={iterDt}
                         fold={true}/>)
         })
         return(
@@ -119,7 +131,8 @@ class Month extends Component {
 function mapStateToProps(state) {
     const current = state.page.current;
     return {
-      dt: current.dt
+      dt: current.dt,
+      dayByDt: state.page.dayByDt
     }
 }
 

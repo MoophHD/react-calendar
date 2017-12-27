@@ -52,7 +52,7 @@ class Appointment extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-      dt: state.page.activeDay,
+      dt: state.page.current.dt,
       dayByDt: state.page.dayByDt
     }
 }

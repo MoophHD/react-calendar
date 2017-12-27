@@ -1,7 +1,7 @@
 import { 
     SWITCH_MONTH_NEXT,
     SWITCH_MONTH_PREVIOUS,
-    SHOW_APPOINTMENT,
+    SELECT_DAY,
     SUBMIT_APPOINTMENT,
     CLEAR_APPOINTMENT
 } from '../constants/page'
@@ -18,10 +18,10 @@ export function switchMonthPrevious() {
     }
 }
 
-export function showAppointment(dt) {
+export function selectDay(day) {
     return {
-        type: SHOW_APPOINTMENT,
-        dt: dt
+        type: SELECT_DAY,
+        day: day
     }
 }
 

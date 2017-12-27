@@ -3,7 +3,7 @@ import moment from 'moment';
 import { 
     SWITCH_MONTH_NEXT,
     SWITCH_MONTH_PREVIOUS,
-    SHOW_APPOINTMENT,
+    SELECT_DAY,
     SUBMIT_APPOINTMENT,
     CLEAR_APPOINTMENT
 } from '../constants/page'
@@ -11,8 +11,7 @@ import {
 let now = moment();
 
 let initialState = {
-    dayByDt: {},
-    activeDay: '', // dt: ..., content: ...
+    dayByDt: {}, //appointments
     current: {
         day: now.day(),
         month: now.month() + 1, //0..11 > 1..12s
@@ -28,18 +27,22 @@ export default function page(state=initialState, action) {
         case (CLEAR_APPOINTMENT): {
             return {...state, dayByDt: {
                     ...state.dayByDt,
-                        [state.activeDay]: ''
+                        [state.current.dt]: ''
                         }}
         }
         case (SUBMIT_APPOINTMENT): {
             if (!action.value) return state;
             return {...state, dayByDt: {
                 ...state.dayByDt,
-                [state.activeDay]: action.value
+                [state.current.dt]: action.value
             }}
         }
-        case (SHOW_APPOINTMENT): {
-            return {...state, activeDay: action.dt}
+        case (SELECT_DAY): {
+            dt = moment(state.current.dt).date(action.day).format();
+            return {...state, current: {...state.current,
+                dt: dt,
+                day: action.day
+            }}
         }
         case (SWITCH_MONTH_NEXT): {
             month = state.current.month;

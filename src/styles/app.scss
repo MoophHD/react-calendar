@@ -22,7 +22,7 @@ body {
     text-align: center;
     padding: 2.5px;
     background-color: $white;
-    transition: background-color 0.075s ease-in;
+    transition: background-color 0.025s ease-in;
     &:hover {
         background-color: $crimson;
         color: $white;
@@ -50,8 +50,28 @@ body {
         background-color: $grey;
         color:darken($grey, 15%);
     }
-    
 }
+
+.day--active {
+    background-color: darken($white, 5%);
+}
+
+.day--appointment {
+    position: relative;
+    &::after{
+      content: '';
+      width: 0;
+      height: 0;
+      border: 5px solid $crimson;
+      border-radius: 50%;
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+    }
+    &:hover::after {
+        border-color: $white;
+    }
+  }
 
 .week {
     display: grid;
